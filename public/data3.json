@@ -1,0 +1,37 @@
+[
+  {
+    "image": "https://source.unsplash.com/400x300/?man,portrait",
+    "name": "John Carter",
+    "rating": 4.9,
+    "description": "Experienced web developer specializing in React and Node.js.",
+    "totalReview": 87
+  },
+  {
+    "image": "https://source.unsplash.com/400x300/?businessman",
+    "name": "Michael Lee",
+    "rating": 4.7,
+    "description": "Digital marketing expert with a focus on SEO and content strategy.",
+    "totalReview": 112
+  },
+  {
+    "image": "https://source.unsplash.com/400x300/?developer,man",
+    "name": "David Kim",
+    "rating": 4.8,
+    "description": "Full-stack developer offering modern MERN stack solutions.",
+    "totalReview": 95
+  },
+  {
+    "image": "https://source.unsplash.com/400x300/?freelancer,man",
+    "name": "Alex Johnson",
+    "rating": 4.6,
+    "description": "Freelance graphic designer delivering stunning brand visuals.",
+    "totalReview": 64
+  },
+  {
+    "image": "https://source.unsplash.com/400x300/?photographer,man",
+    "name": "Ryan Smith",
+    "rating": 4.9,
+    "description": "Professional photographer with 10+ years in portrait and event shoots.",
+    "totalReview": 140
+  }
+]
