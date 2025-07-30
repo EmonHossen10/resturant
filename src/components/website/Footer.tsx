@@ -139,9 +139,9 @@ const Footer = () => {
 
           {/* Links */}
           <div className="flex flex-wrap gap-4 text-sm text-gray-300">
-            <a href="#">F.A.Q</a>
-            <a href="#">Terms</a>
-            <a href="#">Privacy</a>
+            <Link to={"faq"}>F.A.Q</Link>
+            <Link to={"terms"}>Terms</Link>
+            <Link to={"privacy-policy"}>Privacy</Link>
             <a href="#">Sitemap</a>
             <a href="#">Career</a>
           </div>

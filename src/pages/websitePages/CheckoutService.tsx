@@ -1,22 +1,41 @@
-import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import StepFour from "@/components/website/Steps/StepFour";
 import StepOne from "@/components/website/Steps/StepOne";
 import StepThree from "@/components/website/Steps/StepThree";
 import StepTwo from "@/components/website/Steps/StepTwo";
+import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 import Calculation from "./Calculation";
 
+// Define types
+interface Service {
+  id: string;
+  name: string;
+  price: number;
+  [key: string]: any;
+}
+
+interface CartItem extends Service {
+  count: number;
+}
+
+interface SelectedDateTime {
+  professional: string | null;
+  date: string | null;
+  time: string | null;
+}
+
 const CheckoutService = () => {
-  const [step, setStep] = useState(1);
-  const [showModal, setShowModal] = useState(false);
-  const [cartItems, setCartItems] = useState({});
-  const [selectedDateTime, setSelectedDateTime] = useState({
+  const [step, setStep] = useState<number>(1);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<Record<string, CartItem>>({});
+  const [selectedDateTime, setSelectedDateTime] = useState<SelectedDateTime>({
     professional: null,
     date: null,
     time: null,
   });
 
-  const handleAddItemsClick = (service) => {
+  const handleAddItemsClick = (service: Service) => {
     setCartItems((prev) => {
       const existing = prev[service.id];
       const count = existing ? existing.count + 1 : 1;
@@ -27,7 +46,7 @@ const CheckoutService = () => {
     });
   };
 
-  const handleRemoveItemClick = (serviceId) => {
+  const handleRemoveItemClick = (serviceId: string) => {
     setCartItems((prev) => {
       const existing = prev[serviceId];
       if (!existing) return prev;
@@ -57,7 +76,7 @@ const CheckoutService = () => {
 
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
-  const handleSelectionChange = (selection) => {
+  const handleSelectionChange = (selection: SelectedDateTime) => {
     setSelectedDateTime(selection);
   };
 
@@ -101,7 +120,7 @@ const CheckoutService = () => {
             <h2 className="text-xl font-semibold">Step {step} of 4</h2>
           </button>
 
-          <h2 className="font-bold my-3">
+          <h2 className="font-bold text-2xl my-3">
             {step === 1
               ? "Furniture Cleaning"
               : step === 2
@@ -136,11 +155,13 @@ const CheckoutService = () => {
           <Calculation
             cartItems={cartItems}
             selectedDateTime={selectedDateTime}
+            nextStep={nextStep}
+            hasItems={hasItems}
           />
         </div>
       </section>
 
-      {/* Mobile Drawer Bottom */}
+      {/* Mobile Bottom Drawer */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-40">
         <div className="px-4 py-4">
           <Calculation

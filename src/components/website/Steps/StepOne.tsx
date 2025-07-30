@@ -1,17 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState, useRef, useEffect } from "react";
 import { Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+const category = [
+  "Sofa",
+  "Mattress",
+  "Carpet",
+  "Curtain",
+  "Combos",
+  "Nano Coating",
+];
 
 const StepOne = ({ handleAddItemsClick, handleRemoveItemClick, cartItems }) => {
-  const category = [
-    "Sofa",
-    "Mattress",
-    "Carpet",
-    "Curtain",
-    "Combos",
-    "Nano Coating",
-  ];
-
   const [selected, setSelected] = useState("Sofa");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -205,7 +204,12 @@ const StepOne = ({ handleAddItemsClick, handleRemoveItemClick, cartItems }) => {
             {/* Scrollable categories container */}
             <div
               ref={categoryRef}
-              className="flex gap-2 overflow-x-auto whitespace-nowrap flex-1 scrollbar-hide"
+              style={{
+                // Hide scrollbar styles
+                scrollbarWidth: "none", // Firefox
+                msOverflowStyle: "none", // IE & Edge
+              }}
+              className="flex gap-2  overflow-x-auto whitespace-nowrap flex-1"
             >
               {category.map((cat) => (
                 <button
@@ -214,7 +218,7 @@ const StepOne = ({ handleAddItemsClick, handleRemoveItemClick, cartItems }) => {
                   className={`whitespace-nowrap px-4 py-2 rounded-full transition-all duration-300 ease-in-out flex-shrink-0 ${
                     selected === cat
                       ? "bg-[#00B9F2] text-white font-bold"
-                      : "bg-white border border-gray-300 text-[#666666] font-bold"
+                      : "bg-white text-[#666666] font-bold"
                   }`}
                 >
                   {cat}
@@ -274,64 +278,65 @@ const StepOne = ({ handleAddItemsClick, handleRemoveItemClick, cartItems }) => {
 
                 {servicesByCategory[cat].map((service, idx) => (
                   <div
-  key={idx}
-  className="rounded p-2 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-4 mb-4 bg-white"
->
-  <img
-    src={service.img}
-    alt={service.title}
-    className="w-full md:w-32 h-32 object-cover rounded"
-  />
-  <div className="flex-1 w-full">
-    <h4 className="text-base md:text-lg font-semibold">
-      {service.title}
-    </h4>
-    <p className="text-sm text-gray-600 mt-1">
-      Category: {service.description || cat}
-    </p>
+                    key={idx}
+                    className="rounded p-2 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-4 mb-4 bg-white"
+                  >
+                    <img
+                      src={service.img}
+                      alt={service.title}
+                      className="w-full md:w-32 h-32 object-cover rounded"
+                    />
+                    <div className="flex-1 w-full">
+                      <h4 className="text-base md:text-lg font-semibold">
+                        {service.title}
+                      </h4>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Category: {service.description || cat}
+                      </p>
 
-    <div className="mt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-      <div className="flex gap-2 items-center">
-        <span className="text-sm sm:text-base">
-          AED {service.discountPrice}
-        </span>
-        <span className="text-xs sm:text-sm line-through text-gray-400">
-          AED {service.previousPrice}
-        </span>
-      </div>
+                      <div className="mt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex gap-2 items-center">
+                          <span className="text-sm sm:text-base">
+                            AED {service.discountPrice}
+                          </span>
+                          <span className="text-xs sm:text-sm line-through text-gray-400">
+                            AED {service.previousPrice}
+                          </span>
+                        </div>
 
-      <div>
-        {(cartItems[service.id]?.count || 0) === 0 ? (
-          <button
-            onClick={() => handleAddItemsClick(service)}
-            className="bg-[#00B9F2] hover:bg-[#0099CC] text-white font-semibold px-4 py-1 rounded-full text-sm sm:text-base"
-          >
-            Add +
-          </button>
-        ) : (
-          <div className="flex items-center bg-[#F6F8FA] rounded-full px-2 py-1 space-x-3">
-            <button
-              onClick={() => handleRemoveItemClick(service.id)}
-              className="bg-white text-[#00B9F2] hover:text-white hover:bg-[#00B9F2] w-7 h-7 rounded-full text-lg font-bold flex items-center justify-center transition"
-            >
-              −
-            </button>
-            <span className="text-black font-semibold">
-              {cartItems[service.id].count}
-            </span>
-            <button
-              onClick={() => handleAddItemsClick(service)}
-              className="bg-white text-[#00B9F2] hover:text-white hover:bg-[#00B9F2] w-7 h-7 rounded-full text-lg font-bold flex items-center justify-center transition"
-            >
-              +
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  </div>
-</div>
-
+                        <div>
+                          {(cartItems[service.id]?.count || 0) === 0 ? (
+                            <button
+                              onClick={() => handleAddItemsClick(service)}
+                              className="bg-[#00B9F2] hover:bg-[#0099CC] text-white font-semibold px-4 py-1 rounded-full text-sm sm:text-base"
+                            >
+                              Add +
+                            </button>
+                          ) : (
+                            <div className="flex items-center bg-[#F6F8FA] rounded-full px-2 py-1 space-x-3">
+                              <button
+                                onClick={() =>
+                                  handleRemoveItemClick(service.id)
+                                }
+                                className="bg-white text-[#00B9F2] hover:text-white hover:bg-[#00B9F2] w-7 h-7 rounded-full text-lg font-bold flex items-center justify-center transition"
+                              >
+                                −
+                              </button>
+                              <span className="text-black font-semibold">
+                                {cartItems[service.id].count}
+                              </span>
+                              <button
+                                onClick={() => handleAddItemsClick(service)}
+                                className="bg-white text-[#00B9F2] hover:text-white hover:bg-[#00B9F2] w-7 h-7 rounded-full text-lg font-bold flex items-center justify-center transition"
+                              >
+                                +
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </>
             )}

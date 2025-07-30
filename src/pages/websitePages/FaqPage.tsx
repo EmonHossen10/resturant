@@ -1,5 +1,7 @@
-import { useState } from "react";
+import AppDownloadSection from "@/components/website/AppDownloadSection";
 import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const categories = [
   "Doctor at Home",
@@ -96,75 +98,90 @@ const faqs = {
   ],
 };
 
-export default function FAQ() {
+const FaqPage = () => {
   const [activeCategory, setActiveCategory] = useState("Doctor at Home");
   const [openIndex, setOpenIndex] = useState(null);
-
   return (
-    <div className="px-4 py-4">
-      <section className="w-3/5 border border-gray-200 mx-auto bg-white p-4 rounded-lg  ">
-        {/* Category buttons */}
-        <div className="flex justify-between space-x-6 mb-6 pb-2">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className={`relative pb-2 font-semibold uppercase transition-all
+    <div>
+      <div className="text-center mb-6">
+        <Link
+          to={"/"}
+          className="text-sm tracking-widest text-gray-400 uppercase"
+        >
+          Home
+        </Link>
+        <h1 className="text-3xl font-bold text-gray-800 mt-4">
+          Frequently asked questions
+        </h1>
+      </div>
+      <div className="px-4 mt-10 max-w-6xl mx-auto">
+        <section className=" border border-gray-200 mx-auto bg-white p-4 rounded-lg  ">
+          {/* Category buttons */}
+          <div className="flex justify-between space-x-6 mb-6 pb-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                className={`relative pb-2 font-semibold uppercase transition-all
                 ${
                   activeCategory === cat
                     ? "text-sky-400 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-sky-300"
                     : "text-gray-500 hover:text-black"
                 }`}
-              onClick={() => {
-                setActiveCategory(cat);
-                setOpenIndex(null);
-              }}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* FAQ list */}
-        <div className="space-y-4">
-          {(faqs[activeCategory] || []).map((faq, idx) => (
-            <div key={idx} className="border-b border-gray-300 pb-4">
-              <button
-                onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                className="w-full text-left text-lg font-medium flex items-center"
-                aria-expanded={openIndex === idx}
-                aria-controls={`faq-answer-${idx}`}
-                id={`faq-question-${idx}`}
+                onClick={() => {
+                  setActiveCategory(cat);
+                  setOpenIndex(null);
+                }}
               >
-                <span
-                  className="text-gray-400 text-3xl mr-3"
-                  aria-hidden="true"
-                >
-                  {openIndex === idx ? "−" : "+"}
-                </span>
-                <span className="flex-1">{faq.question}</span>
+                {cat}
               </button>
+            ))}
+          </div>
 
-              <AnimatePresence initial={false} mode="wait">
-                {openIndex === idx && (
-                  <motion.div
-                    key="content"
-                    id={`faq-answer-${idx}`}
-                    role="region"
-                    aria-labelledby={`faq-question-${idx}`}
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
+          {/* FAQ list */}
+          <div className="space-y-4">
+            {(faqs[activeCategory] || []).map((faq, idx) => (
+              <div key={idx} className="border-b border-gray-300 pb-4">
+                <button
+                  onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                  className="w-full text-left text-lg font-medium flex items-center"
+                  aria-expanded={openIndex === idx}
+                  aria-controls={`faq-answer-${idx}`}
+                  id={`faq-question-${idx}`}
+                >
+                  <span
+                    className="text-gray-400 text-3xl mr-3"
+                    aria-hidden="true"
                   >
-                    <p className="mt-2 text-gray-600">{faq.answer}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </div>
-      </section>
+                    {openIndex === idx ? "−" : "+"}
+                  </span>
+                  <span className="flex-1">{faq.question}</span>
+                </button>
+
+                <AnimatePresence initial={false} mode="wait">
+                  {openIndex === idx && (
+                    <motion.div
+                      key="content"
+                      id={`faq-answer-${idx}`}
+                      role="region"
+                      aria-labelledby={`faq-question-${idx}`}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="mt-2 text-gray-600">{faq.answer}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </section>
+        <AppDownloadSection></AppDownloadSection>
+      </div>
     </div>
   );
-}
+};
+
+export default FaqPage;

@@ -16,10 +16,14 @@ import SystemSettings from "./pages/SystemSettings";
 import UserDashboard from "./pages/UserDashboard";
 import UserManagement from "./pages/UserManagement";
 import WebsiteSettings from "./pages/WebsiteSettings";
+import BlogPage from "./pages/websitePages/BlogPage";
+import CheckoutService from "./pages/websitePages/CheckoutService";
+import FaqPage from "./pages/websitePages/FaqPage";
 import Home from "./pages/websitePages/Home";
 import MainLayout from "./pages/websitePages/MainLayout";
-import CheckoutService from "./pages/websitePages/CheckoutService";
-import Frequently from "./pages/websitePages/Frequently";
+import PrivacyPolicy from "./pages/websitePages/PrivacyPolicy";
+import SingleCategory from "./pages/websitePages/SingleCategory";
+import Terms from "./pages/websitePages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -31,12 +35,15 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           {/* <Route path="/" element={<Login />} /> */}
-
           {/* frontend Routes */}
           <Route path="/" element={<MainLayout />}>
             <Route path="" element={<Home />} />
-            <Route path="/service" element={<CheckoutService />} />
-            <Route path="/faq" element={<Frequently />} />
+            <Route path="single-category" element={<SingleCategory />} />
+            <Route path="blog-page" element={<BlogPage />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="terms" element={<Terms />} />
+            <Route path="faq" element={<FaqPage />} />
+            <Route path="service" element={<CheckoutService />} />
           </Route>
 
           {/* Role-based Dashboard Routes */}

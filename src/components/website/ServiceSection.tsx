@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 
 type Service = {
   title: string;
@@ -29,7 +30,10 @@ const ServiceSection: React.FC<Props> = ({ heading, services }) => {
       {/* Section Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">{heading}</h2>
-        <div className="space-x-2">
+        <div className="flex items-center space-x-2">
+          <Link to={"/single-category"} className="text-blue-600">
+            See All
+          </Link>
           <button
             onClick={() => scroll("left")}
             className="rounded-full border border-gray-300 hover:bg-gray-300 bg-white 

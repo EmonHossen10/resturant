@@ -1,3 +1,6 @@
+import AppDownloadSection from "@/components/website/AppDownloadSection";
+import PromiseSection from "@/components/website/PromiseSection";
+import ReviewSlider from "@/components/website/ReviewSlider";
 import ServiceCategories from "@/components/website/ServiceCategories";
 import ServiceSection from "@/components/website/ServiceSection";
 import TopReasons from "@/components/website/TopReasons";
@@ -45,11 +48,27 @@ const salonSpa = [
 
 const Home = () => {
   return (
-    <div  >
+    <div>
       <ServiceCategories></ServiceCategories>
       <ServiceSection heading="General Cleaning" services={generalCleaning} />
-      <ServiceSection heading="Salon & Spa at Home" services={salonSpa} />
+      <ServiceSection
+        heading="Salon & Spa at Home"
+        services={generalCleaning}
+      />
+      <ServiceSection
+        heading="Handyman & Maintenance"
+        services={generalCleaning}
+      />
+      <ServiceSection heading="Healthcare at Home" services={generalCleaning} />
+      <div className="max-w-7xl mx-auto">
+        <button className="bg-blue-500 text-white text-xl py-4 px-6 rounded-lg font-semibold hover:bg-blue-600 focus:outline-none w-full">
+          SHOW MORE
+        </button>
+      </div>
       <TopReasons></TopReasons>
+      <ReviewSlider></ReviewSlider>
+      <PromiseSection></PromiseSection>
+      <AppDownloadSection></AppDownloadSection>
     </div>
   );
 };
