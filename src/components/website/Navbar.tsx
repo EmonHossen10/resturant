@@ -1,31 +1,114 @@
 import { Button } from "@/components/ui/button";
-import { LocateFixed, MapPin, Menu, Search, User } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  LocateFixed,
+  MapPin,
+  Menu,
+  User,
+  Search,
+} from "lucide-react";
 import { useRef, useState } from "react";
 
-import img1 from "../../../public/appstore.webp";
-import img2 from "../../../public/playstore.webp";
+const popularSearches = [
+  "Home Cleaning",
+  "Women's Salon",
+  "Women's Spa",
+  "Handyman & Maintenance",
+  "Men's Spa",
+];
+
+const topServices = [
+  { title: "General Cleaning", img: "🧹" },
+  { title: "Salon & Spa at Home", img: "💇‍♀️" },
+  { title: "Handyman &...", img: "🧰" },
+  { title: "Healthcare at Home", img: "🩺" },
+  { title: "AC Cleaning at Home", img: "❄️" },
+  { title: "Plumbing", img: "🔧" },
+  { title: "Car Wash", img: "🚗" },
+];
+
+const countries = [
+  { name: "United Arab Emirates", code: "ae" },
+  { name: "Palestinian Territories", code: "ps" },
+  { name: "Saudi Arabia", code: "sa" },
+  { name: "Qatar", code: "qa" },
+];
+
+const ServiceSlider = ({ services }) => {
+  const scrollRef = useRef(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const scrollAmount = 150;
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div className="relative w-full">
+      {/* Left Arrow */}
+      <button
+        onClick={() => scroll("left")}
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 transition"
+      >
+        <ChevronLeft className="w-5 h-5 text-gray-600" />
+      </button>
+
+      {/* Scrollable Services */}
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto space-x-6 px-8 pb-3 scroll-smooth"
+        style={{ scrollbarWidth: "none" }}
+      >
+        {services.map((service, index) => (
+          <div
+            key={index}
+            className="min-w-[80px] flex-shrink-0 flex flex-col items-center"
+          >
+            <div className="text-3xl mb-2">{service.img}</div>
+            <p className="text-center text-sm text-gray-700 leading-tight">
+              {service.title}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Right Arrow */}
+      <button
+        onClick={() => scroll("right")}
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 transition"
+      >
+        <ChevronRight className="w-5 h-5 text-gray-600" />
+      </button>
+    </div>
+  );
+};
 
 export const Navbar = () => {
   const [location, setLocation] = useState("Dubai Marina");
-  const [value, setValue] = useState("");
-
   const [searchQuery, setSearchQuery] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const containerRef = useRef(null);
-
-  const drawerWidth = containerRef.current?.offsetWidth || "auto";
-
-  // this is for flag modal
   const [isCountryDrawerOpen, setIsCountryDrawerOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(
-    "United Arab Emirates"
-  );
-  const countries = [
-    { name: "United Arab Emirates", code: "ae" },
-    { name: "Pest Co", code: "ps" }, // Note: 'Pest Co' might need a proper country code
-    { name: "Saudi Arabia", code: "sa" },
-    { name: "Qatar", code: "qa" },
-  ];
+  const [selectedCountry, setSelectedCountry] = useState("United Arab Emirates");
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const handleDetectLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          setLocation("Detected Location");
+        },
+        (error) => {
+          alert("Error detecting location: " + error.message);
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  };
 
   const toggleCountryDrawer = () => {
     setIsCountryDrawerOpen(!isCountryDrawerOpen);
@@ -35,57 +118,31 @@ export const Navbar = () => {
     setSelectedCountry(country.name);
     setIsCountryDrawerOpen(false);
   };
-  // profile drawer
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const buttonRef = useRef(null);
 
-  // const dropdownWidth = buttonRef.current?.offsetWidth || 'auto';
-
-  // Function to handle location detection
-  const handleDetectLocation = () => {
-    // Real logic can use navigator.geolocation here
-    alert("Detecting location...");
-  };
   return (
     <div className="shadow-sm bg-white">
-      <div className="max-w-7xl mx-auto ">
-        <header className="w-full px-4 py-2 flex items-center justify-between  ">
-          {/* Left side: Logo + Location */}
-
-          <img src="./jl-logo.svg" alt="" />
-          <div className="flex items-center bg-blue-50 rounded-full px-4 py-2 w-fit shadow-sm">
-            <MapPin className="text-blue-500 w-4 h-4 mr-2" />
-
-            <input
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="Search for area, street name"
-              className="bg-transparent outline-none font-semibold text-black placeholder:text-gray-400"
-            />
-
-            <button onClick={handleDetectLocation} className="ml-2">
-              <LocateFixed className="w-5 h-5 text-sky-500" />
-            </button>
+      <div className="max-w-7xl mx-auto">
+        <header className="w-full px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <img src="/jl-logo.svg" alt="Logo" className="h-8" />
+            <div className="flex items-center bg-blue-50 rounded-full px-4 py-2 shadow-sm">
+              <MapPin className="text-blue-500 w-4 h-4 mr-2" />
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Search for area, street name"
+                className="bg-transparent outline-none font-semibold text-black placeholder:text-gray-400 text-sm"
+              />
+              <button onClick={handleDetectLocation} className="ml-2">
+                <LocateFixed className="w-5 h-5 text-sky-500" />
+              </button>
+            </div>
           </div>
-          {/* Center: Search Bar */}
-          {/* <div className="flex  items-center w-full max-w-md px-4 py-2 border border-gray-300 rounded-full shadow-sm bg-white">
-            <Search className="text-gray-400 w-4 h-4 mr-2" />
-            <input
-              type="text"
-              value={value}
-              // onChange={(e) => onChange(e.target.value)}
-              placeholder={'Search for "Car Wash"'}
-              className="w-full outline-none bg-transparent text-gray-700 placeholder:text-gray-400"
-            />
-          </div> */}
 
-          {/* searchbar and drawer */}
-
-          <div className="relative w-full max-w-md mx-auto">
-            {/* Search Bar */}
+          {/* Search Drawer */}
+          <div className="relative w-full max-w-md mx-4">
             <div
-              ref={containerRef}
               className="flex items-center w-full px-4 py-3 border border-gray-200 rounded-full bg-white shadow-sm cursor-pointer"
               onClick={() => setIsDrawerOpen(!isDrawerOpen)}
             >
@@ -96,108 +153,67 @@ export const Navbar = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for services"
                 className="w-full outline-none bg-transparent text-gray-800 placeholder-gray-400 text-sm"
-                readOnly
               />
             </div>
 
-            {/* Drawer Content */}
             {isDrawerOpen && (
-              <div
-                className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-3 w-full"
-              
-              >
-                {/* Popular Searches Section */}
-                <div className="px-4">
-                  <h3 className="font-medium text-gray-800 mb-2">
+              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-3 w-full max-w-3xl">
+                <div className="p-6">
+                  <h3 className="flex items-center gap-1 font-semibold text-lg text-gray-800 mb-4">
+                    <img src="/search-popularity.svg" className="w-5 h-5" />
                     Popular Searches
                   </h3>
-                  <ul className="space-y-2">
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Home Cleaning
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Women's Salon
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Women's Spa
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Men's Spa
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Handyman & Maintenance
-                    </li>
-                  </ul>
-                </div>
+                  <div className="flex flex-wrap gap-2">
+                    {popularSearches.map((item, index) => (
+                      <button
+                        key={index}
+                        className="flex items-center gap-1 px-3 py-1.5 border border-gray-300 rounded-full text-gray-700 bg-white hover:bg-gray-100 text-sm transition"
+                      >
+                        <img src="/search-popularity.svg" className="w-4 h-4" />
+                        {item}
+                      </button>
+                    ))}
+                  </div>
 
-                {/* Divider */}
-                <div className="border-t border-gray-100 my-2"></div>
+                  {/* Divider */}
+                  <div className="w-full h-[1px] bg-gray-200 my-6" />
 
-                {/* Top Services Section */}
-                <div className="px-4">
-                  <h3 className="font-medium text-gray-800 mb-2">
+                  <h3 className="flex items-center gap-1 font-semibold text-lg text-gray-800 mb-4">
+                    <img src="/star-small.svg" className="w-5 h-5" />
                     Top services for you
                   </h3>
-                  <ul className="space-y-2">
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      General Cleaning
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Salon & Spa at Home
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Handyman & Maintenance
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      Healthcare at Home
-                    </li>
-                    <li className="text-gray-600 hover:bg-gray-50 px-2 py-1.5 rounded cursor-pointer">
-                      AC Clean at Home
-                    </li>
-                  </ul>
+                  <ServiceSlider services={topServices} />
                 </div>
               </div>
             )}
           </div>
 
-          {/* Right side: Language, Flag, Profile */}
+          {/* Language, Country, Profile */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center">
-              <span
-                className="w-16 h-16 rounded-full hover:border border-gray-300 bg-white 
-                   flex items-center justify-center text-sm font-medium 
-                   cursor-pointer"
-              >
-                العربية
-              </span>
-            </div>
+            <button className="w-12 h-12 rounded-full hover:border border-gray-300 bg-white flex items-center justify-center text-sm font-medium cursor-pointer">
+              العربية
+            </button>
 
-            {/* flag */}
-            <div className="relative" ref={containerRef}>
-              {/* Country Flag Button */}
+            <div className="relative">
               <div
-                className="flex items-center justify-center"
+                className="flex items-center justify-center cursor-pointer"
                 onClick={toggleCountryDrawer}
               >
-                <div className="w-16 h-16 rounded-full hover:border border-gray-300 bg-white flex items-center justify-center text-sm font-medium cursor-pointer">
+                <div className="w-12 h-12 rounded-full hover:border border-gray-300 bg-white flex items-center justify-center">
                   <img
                     src={`https://flagcdn.com/w40/${
-                      countries.find((c) => c.name === selectedCountry)?.code ||
-                      "ae"
+                      countries.find((c) => c.name === selectedCountry)?.code || "ae"
                     }.png`}
-                    alt={`${selectedCountry} Flag`}
                     className="w-6 h-6 object-cover rounded-full"
                   />
                 </div>
               </div>
 
-              {/* Country Selection Drawer */}
               {isCountryDrawerOpen && (
-                <div className="absolute top-full  right-8  mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2">
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2">
                   <div className="px-4 py-2 text-sm font-medium text-gray-500 border-b">
                     Select Country
                   </div>
-
                   <ul className="py-1">
                     {countries.map((country) => (
                       <li
@@ -212,7 +228,6 @@ export const Navbar = () => {
                         <div className="flex items-center">
                           <img
                             src={`https://flagcdn.com/w20/${country.code}.png`}
-                            alt={`${country.name} Flag`}
                             className="w-4 h-4 mr-2 rounded-full"
                           />
                           {country.name}
@@ -223,56 +238,42 @@ export const Navbar = () => {
                 </div>
               )}
             </div>
-            {/* Profile and Menu */}
 
+            {/* Profile Button */}
             <div className="relative">
-              {/* Your original button */}
-              <div ref={buttonRef}>
-                <Button
-                  variant="outline"
-                  className="rounded-full px-3 py-2 flex items-center gap-2 w-20 h-16 bg-white hover:bg-gray-50"
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                >
-                  <User className="w-10 h-10" />
-                  <Menu className="w-10 h-10" />
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                className="rounded-full px-3 py-2 flex items-center gap-2 w-20 h-12 bg-white hover:bg-gray-50"
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+              >
+                <User className="w-6 h-6" />
+                <Menu className="w-6 h-6" />
+              </Button>
 
-              {/* Fixed width drawer (400px) */}
               {isProfileOpen && (
-                <div className="absolute  right-8 top-full mt-2 w-[400px] bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
-                  <div className="p-4  ">
-                    <button
-                      className="bg-[#FFD03E] text-white py-2 px-4 rounded-full font-bold
-                    w-full"
-                    >
+                <div className="absolute right-0 top-full mt-2 w-96 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                  <div className="p-4">
+                    <button className="bg-[#FFD03E] text-white py-2 px-4 rounded-full font-bold w-full hover:bg-[#FFC107] transition">
                       Sign Up or Login
                     </button>
                   </div>
-
                   <div className="p-2">
-                    <div className=" flex gap-1 py-2">
+                    <div className="flex items-center gap-2 py-2 hover:bg-gray-50 rounded px-2 cursor-pointer">
                       <img
-                      width={18}
-                        data-v-c1455b16=""
+                        width={18}
                         src="https://deax38zvkau9d.cloudfront.net/prod/assets/static/svgs/question-mark-outlined.svg"
-                        alt="question-mark-outlined-icon"
-                        className="question-mark-icon-custom"
-                        loading="lazy"
-                      ></img>
-                      <h2> Help</h2>
+                      />
+                      <span className="text-sm font-medium">Help</span>
                     </div>
                   </div>
-
                   <hr className="border-gray-300" />
-
-                  <div className="border-t flex gap-10 p-5 border-gray-100  ">
-                    <div>
-                      <img src={img1} alt="App Store" />
-                    </div>
-                    <div>
-                      <img src={img2} alt="Play Store" />
-                    </div>
+                  <div className="flex gap-4 p-5 justify-center">
+                    <a href="https://www.apple.com/app-store/" target="_blank">
+                      <img src="/appstore.webp" className="h-10" />
+                    </a>
+                    <a href="https://play.google.com/store" target="_blank">
+                      <img src="/playstore.webp" className="h-10" />
+                    </a>
                   </div>
                 </div>
               )}
