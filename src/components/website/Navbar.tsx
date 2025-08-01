@@ -103,8 +103,8 @@ export const Navbar = () => {
             {/* Drawer Content */}
             {isDrawerOpen && (
               <div
-                className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-3"
-                style={{ width: drawerWidth }}
+                className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-3 w-full"
+              
               >
                 {/* Popular Searches Section */}
                 <div className="px-4">
